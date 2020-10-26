@@ -7,6 +7,7 @@ This repo contains quantile regression and Bayesian neural network uncertainty q
 
 ## Authors: 
 Primary author (to contact with questions) - Lipi Gupta
+
 SLAC Researchers: Aashwin Mishra and Auralee Edelen
 
 ## Requirements:
