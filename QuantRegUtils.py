@@ -265,7 +265,7 @@ def basic_plotting(ub_pred, lb_pred, median_pred, meas):
     plt.plot(median_pred[:,0], '.', color = colors[1], label = "Median")
     plt.fill_between(np.arange(len(ub_pred[:,0])), ub_pred[:,0], lb_pred[:,0], color = colors[2], alpha = 0.5)
     plt.legend()
-    plt.show()
+
     
     
 def plot_interpolation_predictions(ub_pred, lb_pred, median_pred, meas, outputs, remaining):
@@ -281,7 +281,7 @@ def plot_interpolation_predictions(ub_pred, lb_pred, median_pred, meas, outputs,
     plt.xlabel("Sample Number")
     plt.ylabel("Pulse Energy (mJ)")
     plt.legend()
-    plt.show()
+    #plt.show()
     
 def plot_quad_scan(column, inps, ub_pred, lb_pred, median_pred,  meas):
     plt.figure(figsize = (20,6))
