@@ -1,0 +1,14 @@
+name: feluq
+dependencies:
+  - python=3.7
+  - anaconda::ipykernel
+  - tensorflow
+  - keras
+  - pytorch
+  - matplotlib
+  - pandas
+  - pickle
+  - time
+  - pip
+  - pip:
+    - blitz-bayesian-pytorch
