@@ -7,7 +7,13 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import time
 import basicFunctions as bf
-
+import matplotlib.style
+import matplotlib as mpl
+mpl.style.use('seaborn-bright')
+font = {'family' : 'sans-serif',
+        'weight' : 'bold',
+        'size'   : 25}
+mpl.rc('font', **font)
 
 ### colorblind-friendly colors
 colors = [[0,0,0], [230/255,159/255,0], [86/255,180/255,233/255], [0,158/255,115/255],
@@ -244,25 +250,26 @@ def plot_sorted_predictions(ub_pred, lb_pred, median_pred, meas):
                 break
 
     base=np.arange(len(seq))
-    
+    markersize = 25
     plt.figure(figsize = (20, 8))
-    plt.plot(ub_pred[seq,0], '.-', color = colors[2],label = "UB")
-    plt.plot(lb_pred[seq,0], '.-', color = colors[2],  label = "LB")
-    plt.fill_between(base,ub_pred[seq,0],lb_pred[seq,0], color=colors[2], alpha=0.3, label= '95% Confidence Interval')
-    plt.plot(meas[seq], 'x', color = colors[0], label = "Measurement")
-    plt.plot(median_pred[seq], '.', color = colors[1], label = "Median")
-    plt.xlabel("Psuedo-Sample Number")
+    plt.plot(ub_pred[seq,0], '.-', color = colors[2], label = "97.5% Quantile", markersize = markersize)
+    plt.plot(lb_pred[seq,0], '.-', color = colors[2],  markersize = markersize, label = "2.5% Quantile")
+    plt.fill_between(base, ub_pred[seq,0],lb_pred[seq,0], color=colors[2], alpha = 0.3, label= '95% Confidence Interval')
+    plt.plot(meas[seq], 'x', color = colors[0], markersize = 0.7*markersize, label = "Measured Data")
+    plt.plot(median_pred[seq], '.', alpha = 0.75, color = colors[1], markersize = markersize, label = "Median Prediction")
+    plt.xlabel("Sample Number")
     plt.ylabel("Pulse Energy (mJ)")
-    plt.title("Quantile Regression Uncertainty Estimates and Median Prediction for FEL Pulse Energy")
+    #plt.title("Quantile Regression Uncertainty Estimates and Median Prediction for FEL Pulse Energy")
     plt.legend()
-    plt.show()
+
+
     
 def basic_plotting(ub_pred, lb_pred, median_pred, meas):
     plt.figure(figsize = (20, 8))
-    plt.plot(ub_pred[:,0], color = colors[2], alpha = 0.5, label = "Upper bound")
-    plt.plot(lb_pred[:,0], color = colors[2], alpha = 0.5, label = "Lower bound")
-    plt.plot(meas, 'x', color = colors[0], alpha = 0.75 , label = "Measurement")
-    plt.plot(median_pred[:,0], '.', color = colors[1], label = "Median")
+    plt.plot(ub_pred[:,0], color = colors[2], alpha = 0.5, label = "97.5% Quantile")
+    plt.plot(lb_pred[:,0], color = colors[2], alpha = 0.5, label = "2.5% Quantile")
+    plt.plot(meas, 'x', color = colors[0], alpha = 0.5 , label = "Measured Data")
+    plt.plot(median_pred[:,0], '.', color = colors[1], label = "Median Prediction")
     plt.fill_between(np.arange(len(ub_pred[:,0])), ub_pred[:,0], lb_pred[:,0], color = colors[2], alpha = 0.5)
     plt.legend()
 
@@ -272,11 +279,11 @@ def plot_interpolation_predictions(ub_pred, lb_pred, median_pred, meas, outputs,
     n = len(ub_pred[:,0])
     plt.figure(figsize = (20, 8))
 
-    plt.plot(ub_pred[:,0], color = colors[2], alpha = 0.5, label = "UB")
-    plt.plot(lb_pred[:,0], color = colors[2], alpha = 0.5, label = "LB")
-    plt.plot(meas, 'x', color = colors[-2], alpha = 0.75 , label = "Measurements, Removed from Training")
-    plt.plot(remaining, outputs[remaining], 'x', color = colors[3], label= "Measurements, Available for Training")
-    plt.plot(median_pred[:,0], '.', color = colors[1], label = "Median")
+    plt.plot(ub_pred[:,0], color = colors[2], alpha = 0.5, label = "97.5% Quantile")
+    plt.plot(lb_pred[:,0], color = colors[2], alpha = 0.5, label = "2.5% Quantile")
+    plt.plot(meas, 'x', color = colors[-2], alpha = 0.75 , label = "Measured Data, Removed from Training")
+    plt.plot(remaining, outputs[remaining], 'x', color = colors[3], label= "Measured Data, Available for Training")
+    plt.plot(median_pred[:,0], '.', color = colors[1], label = "Median Prediction")
     plt.fill_between(np.arange(n), ub_pred[:,0], lb_pred[:,0], color = colors[2], alpha = 0.5)
     plt.xlabel("Sample Number")
     plt.ylabel("Pulse Energy (mJ)")
@@ -286,10 +293,10 @@ def plot_interpolation_predictions(ub_pred, lb_pred, median_pred, meas, outputs,
 def plot_quad_scan(column, inps, ub_pred, lb_pred, median_pred,  meas):
     plt.figure(figsize = (20,6))
     plt.title("Quad Scan Performance (per sample)")
-    plt.plot(inps[:,column],ub_pred, color = colors[2], label = "Upper Bound")
-    plt.plot(inps[:,column],lb_pred, color = colors[2], label = "Lower Bound")
-    plt.plot(inps[:,column],median_pred, '.', color = colors[1], label = "Prediction")
-    plt.plot(inps[:,column],meas, 'x', color = colors[0], label = "Measurement")
+    plt.plot(inps[:,column],ub_pred, color = colors[2], label = "97.5% Quantile")
+    plt.plot(inps[:,column],lb_pred, color = colors[2], label = "2.5% Quantile")
+    plt.plot(inps[:,column],median_pred, '.', color = colors[1], label = "Median Prediction")
+    plt.plot(inps[:,column],meas, 'x', color = colors[0], label = "Measured Data")
     plt.fill_between(inps[:,column], ub_pred, lb_pred, color = colors[2], alpha = 0.5)
     plt.legend()
     plt.show()
@@ -297,31 +304,31 @@ def plot_quad_scan(column, inps, ub_pred, lb_pred, median_pred,  meas):
 def plot_quad_scan_persample(column, inps, ub_pred, lb_pred, median_pred,  meas):
     plt.figure(figsize = (20,6))
     plt.title("Quad Scan Performance (per sample)")
-    plt.plot(ub_pred, color = colors[2], label = "Upper Bound")
-    plt.plot(lb_pred, color = colors[2], label = "Lower Bound")
-    plt.plot(median_pred, '.', color = colors[1], label = "Prediction")
-    plt.plot(meas, 'x', color = colors[0], label = "Measurement")
+    plt.plot(ub_pred, color = colors[2], label = "97.5% Quantile")
+    plt.plot(lb_pred, color = colors[2], label = "2.5% Quantile")
+    plt.plot(median_pred, '.', color = colors[1], label = "Median Prediction")
+    plt.plot(meas, 'x', color = colors[0], label = "Measured Data")
     plt.fill_between(np.arange(len(ub_pred)), ub_pred, lb_pred, color = colors[2], alpha = 0.5)
     plt.legend()
     plt.show()
     
     
 def plot_individual_points(ub_pred, lb_pred, median_pred,meas, cols = 3, rows = 5):
-    fig, axs = plt.subplots(rows, cols, figsize = (int(cols*5),int(rows*5)))
-    markersize = 20
+    fig, axs = plt.subplots(rows, cols, figsize = (int(cols*6),int(rows*6)))
+    markersize = 30
     for i in range(rows):
         for j in range(cols):
             ind = np.random.randint(len(meas))
-            axs[i,j].plot(median_pred[ind,0], '.', color = colors[1], markersize = markersize, label = "Median Pred")
-            axs[i,j].plot(meas[ind], 'x', color = colors[0], markersize = markersize, label = "Measured Data")
-            axs[i,j].plot(ub_pred[ind,0],'.', color = colors[2], markersize = markersize, label = "Upper Bound")
-            axs[i,j].plot(lb_pred[ind,0],'.', color = colors[4], markersize = markersize, label = "Lower Bound")
+            axs[i,j].plot(median_pred[ind,0], '.', alpha = 0.75, color = colors[1], markersize = markersize, label = "Median Prediction")
+            axs[i,j].plot(meas[ind], 'x', color = colors[0], markersize = 0.8*markersize, label = "Measured Data")
+            axs[i,j].plot(ub_pred[ind,0],'.', color = colors[2], markersize = markersize, label = "97.5% Quantile")
+            axs[i,j].plot(lb_pred[ind,0],'.', color = colors[4], markersize = markersize, label = "2.5% Quantile")
             axs[i,j].vlines(0, ub_pred[ind,0], lb_pred[ind,0], color = colors[0], alpha = 0.25)
-            axs[i,j].set_title("Sample Number:" + str(ind))
-            axs[i,j].set_ylabel("Pulse Energy (mJ)")
+            #axs[i,j].set_ylabel("Pulse Energy (mJ)")
             axs[i,j].get_xaxis().set_visible(False)
-            axs[i,j].set_xlim([-0.5, 2])
-            axs[i,j].legend()
-            plt.suptitle("")
+            axs[i,j].set_xlim([-0.25, 0.25])
+    
+    fig.text(0.04, 0.5, 'Pulse Energy (mJ)', va='center', rotation='vertical')
+    axs[0,-1].legend( loc='upper center', bbox_to_anchor=(-2, 1.25), fancybox=True, ncol=4, fontsize = 25)
 
-    plt.show()
+    
