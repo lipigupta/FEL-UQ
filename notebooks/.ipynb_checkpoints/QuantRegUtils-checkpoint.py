@@ -14,7 +14,7 @@ import matplotlib as mpl
 mpl.style.use('seaborn-bright')
 font = {'family' : 'sans-serif',
         'weight' : 'bold',
-        'size'   : 25}
+        'size'   : 15}
 mpl.rc('font', **font)
 
 ### colorblind-friendly colors
