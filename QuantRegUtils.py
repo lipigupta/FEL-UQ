@@ -9,6 +9,8 @@ import time
 import basicFunctions as bf
 import matplotlib.style
 import matplotlib as mpl
+
+### Some plotting preferences
 mpl.style.use('seaborn-bright')
 font = {'family' : 'sans-serif',
         'weight' : 'bold',
@@ -19,6 +21,10 @@ mpl.rc('font', **font)
 colors = [[0,0,0], [230/255,159/255,0], [86/255,180/255,233/255], [0,158/255,115/255],
           [213/255,94/255,0], [0,114/255,178/255]]
 
+
+
+###
+
 class Model():
     """
     This is my custom class for all QR model training and evaluation. Useage is demonstrated in the QR notebooks.
@@ -26,18 +32,19 @@ class Model():
     The model architecture is hard coded.
     
     """
-    def __init__(self, scaling_dict = None, NAME = None, PATH = None, QUANTILE = 0.5):
+    def __init__(self, scaling_dict = None, NAME = None, PATH = None, QUANTILE = 0.5, input_dimension = 76):
         self.name = NAME
         self.path = PATH
         self.quantile = QUANTILE
         self.__dict__.update(scaling_dict)
+        self.input_dim = input_dimension
         
     def __str__(self):
         s = f"""This model is {self.name} with quantile: {self.quantile}."""
         return s
 
     def build_model(self):
-        scalar_input = keras.Input(shape = 76)
+        scalar_input = keras.Input(shape = self.input_dim)
         x = layers.Dense(80, activation='tanh')(scalar_input)
         x = layers.Dense(70, activation='tanh')(x)
         x = layers.Dense(60, activation='tanh')(x)
@@ -191,7 +198,7 @@ def make_data_cuts(inputs, outputs, column, a, b, variable_names, verbose = True
 
 def scaling_and_dict(inputs, outputs):
     """ 
-    Helper function to make the scaling dictionary to pass to Model class
+    Helper function to make the scaling dictionary to pass to Model class.
     """
     x_scaled, x_scales, x_offsets = bf.do_scaling(inputs, -1, 1)
     y_offset, y_scale = bf.get_scale(outputs)
@@ -206,7 +213,7 @@ def scaling_and_dict(inputs, outputs):
 
 def calc_mse_and_mae(meas, pred):
     """ 
-    Calculated the MSE and MAE for a 1-d array
+    Calculated the mean squared error (MSE) and mean absolute error (MAE) for a 1-d array.
     """
     mse = np.mean((meas - pred)**2)
     mae = np.mean(np.abs(meas-pred))
@@ -230,6 +237,8 @@ def make_cut_dict(column, a, b, allinds, remaining, xinds, xs, ys):
 
 
 ######## Various plotting functions! All usage is in the notebooks.
+######## Many of these functions do not include the final plt.show() statement to make 
+######## customization in the notebook easier.
 
 def plot_sorted_predictions(ub_pred, lb_pred, median_pred, meas):
     ubinds = np.argsort(ub_pred[:,0])
@@ -259,7 +268,6 @@ def plot_sorted_predictions(ub_pred, lb_pred, median_pred, meas):
     plt.plot(median_pred[seq], '.', alpha = 0.75, color = colors[1], markersize = markersize, label = "Median Prediction")
     plt.xlabel("Sample Number")
     plt.ylabel("Pulse Energy (mJ)")
-    #plt.title("Quantile Regression Uncertainty Estimates and Median Prediction for FEL Pulse Energy")
     plt.legend()
 
 
@@ -278,7 +286,6 @@ def basic_plotting(ub_pred, lb_pred, median_pred, meas):
 def plot_interpolation_predictions(ub_pred, lb_pred, median_pred, meas, outputs, remaining):
     n = len(ub_pred[:,0])
     plt.figure(figsize = (20, 8))
-
     plt.plot(ub_pred[:,0], color = colors[2], alpha = 0.5, label = "97.5% Quantile")
     plt.plot(lb_pred[:,0], color = colors[2], alpha = 0.5, label = "2.5% Quantile")
     plt.plot(meas, 'x', color = colors[-2], alpha = 0.75 , label = "Measured Data, Removed from Training")
@@ -288,7 +295,6 @@ def plot_interpolation_predictions(ub_pred, lb_pred, median_pred, meas, outputs,
     plt.xlabel("Sample Number")
     plt.ylabel("Pulse Energy (mJ)")
     plt.legend()
-    #plt.show()
     
 def plot_quad_scan(column, inps, ub_pred, lb_pred, median_pred,  meas):
     plt.figure(figsize = (20,6))
