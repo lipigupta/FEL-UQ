@@ -10,7 +10,7 @@ This project is in progress. Notebooks with Bayesian neural network training wil
 
 This work has been submitted as a workshop paper at New in ML, NeurIPS 2020 (awaiting acceptance/rejection.)
 
-# The Models:
+## The Models:
 All models currently in this repo are for uncertainty quantification using quantil regression neural networks. The base model simply uses all of the data to make a models to predict the median measured value, and a 2.5% quantile and 97.5% quantile prediction. Interpolation models (models trained on a subset of data then used to predict on another, time-ordered subset) are trained and evaluated in Interp and Interp2.
 
 ## Authors: 
