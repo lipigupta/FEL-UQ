@@ -22,7 +22,7 @@ It is suggested to use the bash script to make the environment. Simply run the s
 
 
 This repo uses git Large File Storage (LFS) so installation of git-lfs may be needed. 
-Link to git lfs information is here[https://git-lfs.github.com/].
+[For git lfs information](https://git-lfs.github.com/).
 
 You can create a unique conda environment for this repo by doing the following (manually): 
 
