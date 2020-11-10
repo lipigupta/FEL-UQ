@@ -3,12 +3,16 @@ channels:
   - conda-forge
 dependencies:
   - python=3.7
+  - jupyterlab
   - anaconda::ipykernel
   - tensorflow
   - keras
   - pytorch
   - matplotlib
   - pandas
-  - pickle
+  - pickle5
   - time
   - pip
+  - pip:
+    - scipy
+    - scikit-learn
