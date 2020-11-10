@@ -13,9 +13,17 @@ SLAC Researchers: Aashwin Mishra and Auralee Edelen
 ## Requirements:
 Required packages are listed in the `environment.yml` file. 
 
-You can create a unique conda environment for this repo by doing the following: 
+It is suggested to use the bash script to make the environment. Simply run the script:
+
+```./prepare.sh ```
+
+``` conda activate feluq ```
+
+
+You can create a unique conda environment for this repo by doing the following (manually): 
 
 ```conda env create -f environment.yml```
 
 ```conda activate feluq```
 
+This method may require manual installation of scikit-learn from pip, due to some yet-unsolved bug.
