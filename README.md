@@ -6,7 +6,7 @@ SLAC LCLS UQ Project
 This repo contains quantile regression uncertainty quantification results for the SLAC LCLS FEL pulse energy prediction. This project is in progress. This work has been submitted as a workshop paper at New in ML, NeurIPS 2020 (awaiting acceptance/rejection.)
 
 ## Authors: 
-Primary author (to contact with questions) - Lipi Gupta <lipigupta at uchicago.edu>
+Primary author (to contact with questions) - Lipi Gupta (lipigupta at uchicago.edu)
 
 SLAC Researchers: Aashwin Mishra and Auralee Edelen
 
