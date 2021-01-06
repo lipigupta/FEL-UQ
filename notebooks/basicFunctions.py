@@ -8,57 +8,7 @@ import tensorflow as tf
 from tensorflow import keras
 
 
-#found online for axis formatting
-import matplotlib.ticker as mticker
-
-class MathTextSciFormatter(mticker.Formatter):
-    def __init__(self, fmt="%1.2e"):
-        self.fmt = fmt
-    def __call__(self, x, pos=None):
-        s = self.fmt % x
-        decimal_point = '.'
-        positive_sign = '+'
-        tup = s.split('e')
-        significand = tup[0].rstrip(decimal_point)
-        sign = tup[1][0].replace(positive_sign, '')
-        exponent = tup[1][1:].lstrip('0')
-        if exponent:
-            exponent = '10^{%s%s}' % (sign, exponent)
-        if significand and exponent:
-            s =  r'%s{\times}%s' % (significand, exponent)
-        else:
-            s =  r'%s%s' % (significand, exponent)
-        return "${}$".format(s)
-        
-        
-# define class for showing training plot - found online
-class PlotLosses(tf.keras.callbacks.Callback):
-    def on_train_begin(self, logs={}):
-        self.i = 0
-        self.x = []
-        self.losses = []
-        self.val_losses = []
-        
-        self.fig = plt.figure()
-        
-        self.logs = []
-
-    def on_epoch_end(self, epoch, logs={}):
-        self.logs.append(logs)
-        self.x.append(self.i)
-        self.losses.append(logs.get('loss'))
-        self.val_losses.append(logs.get('val_loss'))
-        self.i += 1
-        
-        clear_output(wait=True)
-        plt.plot(self.x, self.losses, label="loss")
-        plt.plot(self.x, self.val_losses, label="val_loss")
-        plt.legend()
-        plt.ylabel('error')
-        plt.xlabel('epoch')
-        plt.show()
-
-plot_losses = PlotLosses()
+#### A variety of scaling functions ####
 
 
 def get_scale(data):
@@ -121,3 +71,56 @@ def do_unscaling(data, lower, upper, scales, offsets):
         unscaled[:,i] = sc_back
     return unscaled
     
+    
+## Some plotting help for training
+#found online for axis formatting
+import matplotlib.ticker as mticker
+
+class MathTextSciFormatter(mticker.Formatter):
+    def __init__(self, fmt="%1.2e"):
+        self.fmt = fmt
+    def __call__(self, x, pos=None):
+        s = self.fmt % x
+        decimal_point = '.'
+        positive_sign = '+'
+        tup = s.split('e')
+        significand = tup[0].rstrip(decimal_point)
+        sign = tup[1][0].replace(positive_sign, '')
+        exponent = tup[1][1:].lstrip('0')
+        if exponent:
+            exponent = '10^{%s%s}' % (sign, exponent)
+        if significand and exponent:
+            s =  r'%s{\times}%s' % (significand, exponent)
+        else:
+            s =  r'%s%s' % (significand, exponent)
+        return "${}$".format(s)
+        
+        
+# define class for showing training plot - found online
+class PlotLosses(tf.keras.callbacks.Callback):
+    def on_train_begin(self, logs={}):
+        self.i = 0
+        self.x = []
+        self.losses = []
+        self.val_losses = []
+        
+        self.fig = plt.figure()
+        
+        self.logs = []
+
+    def on_epoch_end(self, epoch, logs={}):
+        self.logs.append(logs)
+        self.x.append(self.i)
+        self.losses.append(logs.get('loss'))
+        self.val_losses.append(logs.get('val_loss'))
+        self.i += 1
+        
+        clear_output(wait=True)
+        plt.plot(self.x, self.losses, label="loss")
+        plt.plot(self.x, self.val_losses, label="val_loss")
+        plt.legend()
+        plt.ylabel('error')
+        plt.xlabel('epoch')
+        plt.show()
+
+plot_losses = PlotLosses()
