@@ -59,7 +59,7 @@ class Model():
     def load(self):
         self.model = self.build_model()
         self.model.load_weights(self.path + self.name)
-        self.model.compile(loss = lambda y_true, y_pred: self.quantile_regression(y_true, y_pred), optmizer = 'adam')
+        self.model.compile(loss = lambda y_true, y_pred: self.quantile_regression(y_true, y_pred), optimizer = 'adam')
         
     def quantile_regression(self, y_true, y_pred, sample_weight = None):
         error = tf.subtract(y_true, y_pred)
@@ -82,7 +82,7 @@ class Model():
 
 
         self.model = self.build_model()
-        self.model.compile(loss = lambda y_true, y_pred: self.quantile_regression(y_true, y_pred), optmizer = 'adam')
+        self.model.compile(loss = lambda y_true, y_pred: self.quantile_regression(y_true, y_pred), optimizer = 'adam')
         self.model.summary()
 
         mc = tf.keras.callbacks.ModelCheckpoint(self.path + self.name +'best_model_checkpoint.h5', monitor='val_loss', mode='min', save_best_only=True)
@@ -105,7 +105,7 @@ class Model():
         print("Training Complete")
     
     def train_on_split_data(self, input_dict, output_dict, epochs = 5000, batch_size = 4096, saving = True):
-        X_train = inpsc = bf.scale_data(input_dict["train"], self.xoffsets, self.xscales, -1, 1)
+        X_train = bf.scale_data(input_dict["train"], self.xoffsets, self.xscales, -1, 1)
         X_val = bf.scale_data(input_dict["val"], self.xoffsets, self.xscales, -1, 1)
         X_test = bf.scale_data(input_dict["test"], self.xoffsets, self.xscales, -1, 1)
         Y_train = bf.scale_data(output_dict["train"], self.yoffset, self.yscale, -1,1)
@@ -124,7 +124,7 @@ class Model():
 
 
         self.model = self.build_model()
-        self.model.compile(loss = lambda y_true, y_pred: self.quantile_regression(y_true, y_pred), optmizer = 'adam')
+        self.model.compile(loss = lambda y_true, y_pred: self.quantile_regression(y_true, y_pred), optimizer = 'adam')
         self.model.summary()
 
         mc = tf.keras.callbacks.ModelCheckpoint(self.path + self.name +'best_model_checkpoint.h5', monitor='val_loss', mode='min', save_best_only=True)
@@ -261,9 +261,9 @@ def plot_sorted_predictions(ub_pred, lb_pred, median_pred, meas):
     base=np.arange(len(seq))
     markersize = 25
     plt.figure(figsize = (20, 8))
-    plt.plot(ub_pred[seq,0], '.-', color = colors[2], label = "97.5% Quantile", markersize = markersize)
-    plt.plot(lb_pred[seq,0], '.-', color = colors[2],  markersize = markersize, label = "2.5% Quantile")
-    plt.fill_between(base, ub_pred[seq,0],lb_pred[seq,0], color=colors[2], alpha = 0.3, label= '95% Confidence Interval')
+    #plt.plot(ub_pred[seq,0], '.-', color = colors[2], label = "97.5% Quantile", markersize = markersize)
+    #plt.plot(lb_pred[seq,0], '.-', color = colors[2],  markersize = markersize, label = "2.5% Quantile")
+    plt.fill_between(base, ub_pred[seq,0],lb_pred[seq,0], color=colors[2], alpha = 0.6, label= '95% Confidence Interval')
     plt.plot(meas[seq], 'x', color = colors[0], markersize = 0.7*markersize, label = "Measured Data")
     plt.plot(median_pred[seq], '.', alpha = 0.75, color = colors[1], markersize = markersize, label = "Median Prediction")
     plt.xlabel("Sample Number")
